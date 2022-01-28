@@ -7,11 +7,9 @@ const create = async ({ name, quantity }) => {
   return product;
 };
 
-const productExiste = async (name) => {
-  storeModel.productsExist(name);
-};
+const productExist = async (name) => storeModel.productsExist(name);
 
 module.exports = {
   create,
-  productExiste,
+  productExist,
 };

@@ -1,6 +1,6 @@
 const storeServices = require('../services/storeServices');
 
-const authName = async (req, res, next) => {
+const authName = (req, res, next) => {
   const { name } = req.body;
   
   if (!name) {
@@ -13,7 +13,7 @@ const authName = async (req, res, next) => {
   next();
 };
 
-const authQuantity = async (req, res, next) => {
+const authQuantity = (req, res, next) => {
   const { quantity } = req.body;
 
   if (!quantity) {

@@ -17,7 +17,6 @@ const productsExist = async (name) => {
     'SELECT INTO StoreManager.products WHERE name = ?',
     [name],
   );
-
   return result;
 };
 
