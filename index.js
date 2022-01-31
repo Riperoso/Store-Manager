@@ -16,6 +16,10 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+app.get('/products', storeController.getAllProducts);
+
+app.get('/products/:id', storeController.getProductId);
+
 app.post('/products', [authName,
   authQuantity, authExist, storeController.create]);
 
