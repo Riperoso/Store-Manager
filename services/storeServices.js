@@ -20,9 +20,16 @@ const create = async (name, quantity) => {
 
 const productExist = async (name) => storeModel.productsExist(name);
 
+const attProduct = async (name, quantity, id) => {
+  const product = await storeModel.attProduct(name, quantity, id);
+
+  return product;
+};
+
 module.exports = {
   getAllProducts,
   getProductId,
   create,
+  attProduct,
   productExist,
 };

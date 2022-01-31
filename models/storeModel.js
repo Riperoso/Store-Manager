@@ -38,9 +38,23 @@ const productsExist = async (name) => {
   return result;
 };
 
+const attProduct = async (name, quantity, id) => {
+  await connection.execute(
+    'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?',
+    [name, quantity, id],
+  );
+    const dttProduct = await getProductId(id);
+  return {
+    id: dttProduct.id,
+    name: dttProduct.name,
+    quantity: dttProduct.quantity,
+  };
+};
+
 module.exports = {
   getAllProducts,
   getProductId,
   create,
   productsExist,
+  attProduct,
 };

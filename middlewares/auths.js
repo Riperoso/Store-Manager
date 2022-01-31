@@ -38,8 +38,19 @@ const authExist = async (req, res, next) => {
   next();
 };
 
+const authNotExist = async (req, res, next) => {
+  const { id } = req.params;
+  const product = await storeServices.getProductId(id);
+
+  if (product === [] || product === null) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+
+  next();
+};
 module.exports = {
   authName,
   authQuantity,
   authExist,
+  authNotExist,
 };

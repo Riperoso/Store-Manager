@@ -6,6 +6,7 @@ const {
   authName,
   authExist,
   authQuantity,
+  authNotExist,
 } = require('./middlewares/auths');
 
 const app = express();
@@ -19,6 +20,9 @@ app.get('/', (_request, response) => {
 app.get('/products', storeController.getAllProducts);
 
 app.get('/products/:id', storeController.getProductId);
+
+app.put('/products/:id', [authName,
+authQuantity, authNotExist, storeController.attProduct]);
 
 app.post('/products', [authName,
   authQuantity, authExist, storeController.create]);
