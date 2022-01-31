@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const storeModel = require('../../models/storeModel');
 const connection = require('../../models/connection');
 
-describe('Insere um novo item no bando de dados', () => {
+describe('Insere um novo produto no banco de dados', () => {
   const payloadStore = {
    name: 'farofa',
    quantity: '5',
@@ -44,5 +44,148 @@ describe('Insere um novo item no bando de dados', () => {
 
       expect(response).to.have.a.property('quantity');
     });
-  })
-})
+  });
+});
+
+describe('busca todos os produtos do banco de dados', () => {
+  describe('quando não existe produtos', () => {
+    before(() => {
+
+      sinon.stub(connection, 'execute').resolves([[]])
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna um array', async () => {
+      const response = await storeModel.getAllProducts();
+      expect(response).to.be.an('array');
+    });
+
+    it('retorna um array vazio', async () => {
+      const response = await storeModel.getAllProducts();
+      expect(response).to.be.empty;
+    });
+  });
+
+  describe('quando existe produtos', () => {
+    const payloadStore = [[
+      {
+        id: 1,
+        name: "farofa",
+        quantity: 10
+      },
+      {
+        id: 2,
+        name: "farinha",
+        quantity: 35
+      }
+    ]];
+
+    before(() => {
+      sinon.stub(connection, 'execute').resolves(payloadStore)
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna um array', async () => {
+      const response = await storeModel.getAllProducts();
+
+      expect(response).to.be.an('array');
+    });
+
+    it('o array não está vazio', async () => {
+      const response = await storeModel.getAllProducts();
+
+      expect(response).to.be.not.empty;
+    });
+
+    it('o array tem as chaves id, name e quantity', async() => {
+      const response = await storeModel.getAllProducts();
+
+      expect(response).to.include.all.keys('id','name', 'quantity');
+    });
+  });
+});
+
+describe("consulta produto por id no banco de dados", () => {
+
+
+  describe("quando existe o produto criado", () => {
+    before(async () => {
+
+      sinon.stub(connection, "execute").returns([
+      [{
+        id: 1,
+        name: "farofa",
+        quantity: 10
+      }]
+    ]);
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    it("retorna um objeto", async () => {
+      const response = await storeModel.getProductId();
+
+      expect(response).to.be.an('object');
+    });
+
+    it("o objeto não está vazio", async () => {
+      const response = await storeModel.getProductId();
+
+      expect(response).to.be.not.empty;
+    });
+
+    it("contem as chaves id, name e quantity", async () => {
+      const response = await storeModel.getProductId();
+
+      expect(response).to.contain.keys('id', 'name', 'quantity');
+    });
+  });
+
+  describe("quando não existe o produto criado", () => {
+    before(() => {
+
+      sinon.stub(connection, "execute").returns([{}]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it("retorna array", async () => {
+      const response = await storeModel.getProductId();
+
+      expect(response).to.be.an('object');
+    });
+    it("retorna array vazio", async () => {
+      const response = await storeModel.getProductId();
+
+      expect(response).to.be.empty;
+    });
+  });
+
+  describe("quando é passado um id de um produto que não existe", () => {
+    before(() => {
+
+      sinon.stub(connection, "execute").returns([[null]]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna null', async () => {
+      const response = await storeModel.getProductId();
+      
+      expect(response).to.be.null;
+    });
+
+  });
+});

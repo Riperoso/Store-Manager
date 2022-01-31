@@ -1,10 +1,10 @@
-const sinon = require(sinon);
+const sinon = require('sinon');
 const { expect } = require('chai');
 
 const storeServices = require('../../services/storeServices');
 const storeController = require('../../controllers/storeControllers');
 
-describe('Aochamar o controller de create', () => {
+describe('Ao chamar o controller de create', () => {
   describe('quando o payload informado não é válido', () => {
     const response = {};
     const request = {};
@@ -71,4 +71,37 @@ describe('Aochamar o controller de create', () => {
 
   });
 
+});
+
+
+describe("Ao chamar o controller de getAllProducts", () => {
+  describe("quando existem produtos no banco de dados", async () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.body = {};
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      sinon.stub(storeServices, "getAllProducts").resolves([]);
+    });
+
+    after(() => {
+      storeServices.getAllProducts.restore();
+    });
+
+    it('é chamado o status com o código 200', async () => {
+      await storeController.getAllProducts(request, response);
+
+      expect(response.status.calledWith(200)).to.be.equals(true);
+    });
+
+    it('é chamado o json passando um array', async () => {
+      await storeController.getAllProducts(request, response);
+
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
+    });
+  });
 });
