@@ -1,11 +1,14 @@
 const storeModel = require('../models/storeModel');
 
 const getAllProducts = async () => {
-  storeModel.getAllProducts();
+  const products = await storeModel.getAllProducts();
+  return products;
 };
 
 const getProductId = async (id) => {
-  storeModel.getProductId(id);
+ const product = await storeModel.getProductId(id);
+
+ return product;
 };
 
 const create = async (name, quantity) => {
