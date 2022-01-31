@@ -26,10 +26,17 @@ const attProduct = async (name, quantity, id) => {
   return product;
 };
 
+const deleteProduct = async (id) => {
+  const product = await storeModel.deleteProduct(id);
+
+  return product;
+};
+
 module.exports = {
   getAllProducts,
   getProductId,
   create,
   attProduct,
   productExist,
+  deleteProduct,
 };

@@ -51,10 +51,21 @@ const attProduct = async (name, quantity, id) => {
   };
 };
 
+const deleteProduct = async (id) => {
+  const product = await getProductId(id);
+  await connection.execute(
+    'DELETE FROM StoreManager.products WHERE id = ?',
+    [id],
+  );
+
+  return product;
+};
+
 module.exports = {
   getAllProducts,
   getProductId,
   create,
   productsExist,
   attProduct,
+  deleteProduct,
 };

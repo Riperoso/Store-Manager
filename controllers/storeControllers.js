@@ -35,9 +35,18 @@ const attProduct = async (req, res) => {
   res.status(200).json(product);
 };
 
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await storeServices.deleteProduct(id);
+
+  res.status(200).json(product);
+};
+
 module.exports = {
   getAllProducts,
   getProductId,
   create,
   attProduct,
+  deleteProduct,
 };

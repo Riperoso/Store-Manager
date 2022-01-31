@@ -27,6 +27,8 @@ authQuantity, authNotExist, storeController.attProduct]);
 app.post('/products', [authName,
   authQuantity, authExist, storeController.create]);
 
+app.delete('/products/:id', [authNotExist, storeController.deleteProduct]);
+
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
 });
