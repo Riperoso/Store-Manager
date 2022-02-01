@@ -47,6 +47,65 @@ describe('Insere um novo produto no banco de dados', () => {
   });
 });
 
+describe("verifica se o produto existe", () => {  
+  describe("quando existe o produto", () => {
+    const payload = {
+      id: 1,
+      name: 'farofa',
+      quantity: 32
+    };
+
+    before(async () => {
+      const execute = [[payload]];
+      sinon.stub(connection, "execute").resolves(execute);
+
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    const { name } = payload
+
+    it('deve ser um objeto', async () => {
+      const response = await storeModel.productsExist(name)
+
+      expect(response).to.be.an('object');
+    });
+
+    it("possui o id, name e quantity do produto buscado", async () => {
+      const response = await storeModel.productsExist(name)
+
+      expect(response).to.have.all.keys("id", "name", "quantity");
+    });
+
+    it("deve retornar um objeto com os valores do product", async () => {
+      const response = await storeModel.productsExist(name)
+
+      expect(response).to.deep.equal(payload)
+    });
+  });
+  describe("quando não existe o produto", () => {
+    const name = 'farofa'
+
+    before(async () => {
+      const execute = null;
+      sinon.stub(connection, "execute").resolves(execute);
+
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    it("deve retornar um objeto com os valores do product", async () => {
+      const response = await storeModel.productsExist(name)
+
+      expect(response).to.be.null
+    });
+  });
+});
+
 describe('busca todos os produtos do banco de dados', () => {
   describe('quando não existe produtos', () => {
     before(() => {
@@ -183,9 +242,87 @@ describe("consulta produto por id no banco de dados", () => {
 
     it('retorna null', async () => {
       const response = await storeModel.getProductId();
-      
+
       expect(response).to.be.null;
     });
 
+  });
+});
+
+describe("edita um produto no banco de dados", () => {
+  const payload = {
+    id: 4,
+    name: 'produto',
+    quantity: 102
+  };
+
+  const { name, quantity, id } = payload;
+
+  before(async () => {
+    // Referência a Marcelo Araujo - TURMA 14A - https://github.com/tryber/sd-014-a-store-manager/blob/marcSeaLow-store-manager/test/unit/models.js
+    const execute = [[payload]];
+    sinon.stub(connection, "execute").resolves(execute);
+  });
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  describe("quando existe algum produto no DB", () => {
+
+    it("retorna um objeto", async () => {
+      const response = await storeModel.attProduct(name, quantity, id);
+
+      expect(response).to.be.an('object');
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await storeModel.attProduct(name, quantity, id);
+
+      expect(response).to.have.all.keys("id", "name", "quantity");
+    });
+
+    it("retorna o payload esperado", async () => {
+      const response = await storeModel.attProduct(name, quantity, id); 
+      expect(response).to.deep.equal(payload);
+    });
+  });
+});
+
+describe("deleta um produto do banco de dados", () => {  
+  describe("quando existe o produto no banco de dados", () => {
+    const payload = {
+      id: 1,
+      name: 'farofa',
+      quantity: 32
+    };
+
+    before(async () => {
+      const execute = [[payload]];
+      sinon.stub(connection, "execute").resolves(execute);
+
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    it('deve ser um objeto', async () => {
+      const response = await storeModel.deleteProduct(1);
+
+      expect(response).to.be.an('object');
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await storeModel.deleteProduct(1);
+
+      expect(response).to.have.all.keys("id", "name", "quantity");
+    });
+
+    it("deve retornar um objeto com os valores do product apagado", async () => {
+      const response = await storeModel.deleteProduct(1);
+
+      expect(response).to.deep.equal(payload)
+    });
   });
 });

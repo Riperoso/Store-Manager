@@ -181,9 +181,73 @@ describe("consulta de produtos por id em services", () => {
 
     it('retorna null', async () => {
       const response = await storeServices.getProductId();
-      
+
       expect(response).to.be.null;
     });
 
   });
-}); 
+});
+
+describe("edita algum produto", () => {
+  const payload = {
+    id: 3,
+    name: 'farofa',
+    quantity: 210,
+  };
+
+  before(() => {
+    sinon.stub(storeModel, "attProduct").resolves(payload);
+  });
+
+  after(() => {
+    storeModel.attProduct.restore();
+  });
+
+  const { name, quantity, id } = payload;
+
+  describe("quando é editado com sucesso", () => {
+    it("retorna um objeto", async () => {
+      const response = await storeServices.attProduct(name, quantity, id);
+
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await storeServices.attProduct(name, quantity, id);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+  });
+});
+
+describe("deleta algum produto", () => {
+  const payload = {
+    id: 3,
+    name: 'farofa',
+    quantity: 210,
+  };
+
+  before(() => {
+    sinon.stub(storeModel, "deleteProduct").resolves(payload);
+  });
+
+  after(() => {
+    storeModel.deleteProduct.restore();
+  });
+
+  const { name, quantity, id } = payload;
+
+  describe("quando é deletado com sucesso", () => {
+    it("retorna um objeto", async () => {
+      const response = await storeServices.deleteProduct(id);
+
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto deleteado", async () => {
+      const response = await storeServices.deleteProduct(id);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+  });
+});
