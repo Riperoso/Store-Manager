@@ -4,59 +4,24 @@ const { expect } = require('chai');
 const storeServices = require('../../services/storeServices');
 const storeController = require('../../controllers/storeControllers');
 
-describe('Ao chamar o controller de create', () => {
-  describe('quando o payload informado não é válido', () => {
+describe("Ao chamar o controller de create", () => {
+  describe("quando existe um produto no DB", () => {
+    const payload = {
+      id: 1,
+      name: 'farofa',
+      quantity: 10
+    };
+
     const response = {};
-    const request = {};
+    const request = { body: {} };
 
     before(() => {
-      request.body = {};
+      request.body = { name: "farofa", quantity: 10 };
 
-      response.status = sinon.stub()
-      .returns(response);
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().resolves();
 
-      response.send = sinon.stub()
-      .returns()
-
-      sinon.stub(storeServices, 'create')
-      .resolves(false);
-    });
-
-    after(() => {
-      storeServices.create.restore();
-    });
-
-    it('é chamado o status com o código 400', async () => {
-      await storeController.create(request, response);
-
-      expect(response.status.calledWith(400)).to.be.equal(true);
-    });
-
-    it('é chamado o send com a mensagem "Dados inálidos"', async () => {
-      await storeController.create(request, response);
-
-      expect(response.send.calledWith('Dados inválidos')).to.be.equal(true);
-    });
-   
-  });
-
-  describe('quando é inserido com sucesso', () => {
-    const response = {};
-    const request = {};
-
-    before(() => {
-      request.body = {
-        name: 'Farofa',
-        quantity: 5,
-      };
-
-      response.status = sinon.stub()
-      .returns(response);
-      response.send = sinon.stub()
-      .returns();
-
-      sinon.stub(storeServices, 'create')
-      .resolves(true);
+      sinon.stub(storeServices, "create").resolves(payload);
     });
 
     after(() => {
@@ -66,11 +31,15 @@ describe('Ao chamar o controller de create', () => {
     it('é chamado o status com o código 201', async () => {
       await storeController.create(request, response);
 
-      expect(response.status.calledWith(201)).to.be.equal(true);
+      expect(response.status.calledWith(201)).to.be.equals(true);
     });
 
-  });
+    it('é chamado o json com um objeto', async () => {
+      await storeController.create(request, response);
 
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+  });
 });
 
 
@@ -172,7 +141,7 @@ describe("Ao chamar o controller de getProductdId", () => {
     });
 
     it('é chamado o send com a mensagem "Product not found"', async () => {
-      await ProductsController.getById(request, response);
+      await storeController.getProductId(request, response);
       expect(response.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
     });
   });
