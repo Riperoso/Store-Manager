@@ -18,7 +18,6 @@ describe('Insere um novo produto no banco de dados', () => {
   after(async () => {
     connection.execute.restore();
   });
-
   describe('quando é inserido com sucesso', () => {
 
     it('retorna um objeto', async () => {
