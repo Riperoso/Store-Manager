@@ -36,6 +36,10 @@ app.delete('/products/:id', [authNotExist, storeController.deleteProduct]);
 app.post('/sales', [authProductSale, 
   authSaleQuantity, authRightQuantity, salesController.createSalesProduct]);
 
+app.get('/sales', salesController.getAllSales);
+
+app.get('/sales/:id', salesController.getIdSale);
+
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
 });

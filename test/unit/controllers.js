@@ -239,12 +239,6 @@ describe('testes dos Controllers de sales', () => {
   describe("Ao chamar o controller de createProductsSale", () => {
 
     describe("quando existe um produto no DB", () => {
-      const payload = {
-        id: 1,
-        name: 'farofa',
-        quantity: 10
-      };
-
       const response = {};
       const request = { body: {} };
 
