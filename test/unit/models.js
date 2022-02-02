@@ -1,6 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const storeModel = require('../../models/storeModel');
+const saleModel = require('../../models/saleModels');
 const connection = require('../../models/connection');
 
 describe('Testes de products', () => {
@@ -310,21 +311,19 @@ describe('Testes de products', () => {
 describe('Testes de sales', () => {
 
   describe('Cadastra uma nova sale no banco de dados', () => {
-    const payloadStore = {
-    productId: 1,
-    quantity: 5,
-    }
+    const payloadStore = [{
+      productId: 1,
+      quantity: 5,
+      id: 5
+    }]
 
     before(async () => {
-      sinon.stub(connection, 'execute').resolves([{
-        id: 1,
-    itemsSold: [
-      {
+      const execute = {
         product_id: 1,
-        quantity: 5
-      },
-    ]
-      }]);
+        quantity: 5,
+        sale_id: 5
+      }
+      sinon.stub(connection, 'execute').resolves(execute);
     });
 
     after(async () => {
@@ -334,25 +333,25 @@ describe('Testes de sales', () => {
     describe('quando é inserido com sucesso', () => {
 
       it('retorna um objeto', async () => {
-        const response = await storeModel.create(payloadStore);
+        const response = await saleModel.createSalesProduct(payloadStore);
 
         expect(response).to.be.a('object');
       });
 
       it('tal objeto possui o "id" do novo produto inserido', async () => {
-        const response = await storeModel.create(payloadStore);
+        const response = await saleModel.createSalesProduct(payloadStore);
 
         expect(response).to.have.a.property('id')
       });
 
-      it('o objeto possui a chave "name"', async () => {
-        const response = await storeModel.create(payloadStore);
+      it('o objeto possui a chave "id_product"', async () => {
+        const response = await saleModel.createSalesProduct(payloadStore);
 
-        expect(response).to.have.a.property('name');
+        expect(response).to.have.a.property('id_product');
       });
 
       it('o objeto possui a chave "quantity"', async () => {
-        const response = await storeModel.create(payloadStore);
+        const response = await saleModel.createSalesProduct(payloadStore);
 
         expect(response).to.have.a.property('quantity');
       });
