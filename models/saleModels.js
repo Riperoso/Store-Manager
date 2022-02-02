@@ -19,7 +19,8 @@ const getAllSales = async () => {
   const [allSales] = await connection.execute(
     `SELECT salep.sale_id as saleId,
     sale.date, salep.product_id, salep.quantity 
-    FROM sales_products as salep INNER JOIN sales as sale ON salep.sale_id = sale.id`,
+    FROM StoreManager.sales_products as salep 
+    INNER JOIN StoreManager.sales as sale ON salep.sale_id = sale.id`,
   );
   return allSales;
 };
@@ -27,7 +28,8 @@ const getAllSales = async () => {
 const getIdSale = async (id) => {
   const [saleId] = await connection.execute(
     `SELECT sale.date, salep.product_id, salep.quantity
-    FROM sales_products as salep INNER JOIN sales as sale ON salep.sale_id = sale.id
+    FROM StoreManager.sales_products as salep INNER JOIN StoreManager.sales as sale
+    ON salep.sale_id = sale.id
     WHERE salep.sale_id = ?`,
     [id],
   );
