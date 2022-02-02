@@ -2,11 +2,15 @@ require('dotenv').config();
 const express = require('express');
 
 const storeController = require('./controllers/storeControllers');
+const salesController = require('./controllers/salesControllers');
 const {
   authName,
   authExist,
   authQuantity,
   authNotExist,
+  authProductSale,
+  authSaleQuantity,
+  authRightQuantity,
 } = require('./middlewares/auths');
 
 const app = express();
@@ -28,6 +32,9 @@ app.post('/products', [authName,
   authQuantity, authExist, storeController.create]);
 
 app.delete('/products/:id', [authNotExist, storeController.deleteProduct]);
+
+app.post('/sales', [authProductSale, 
+  authSaleQuantity, authRightQuantity, salesController.createSalesProduct]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
