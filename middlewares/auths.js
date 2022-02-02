@@ -52,10 +52,11 @@ const authNotExist = async (req, res, next) => {
 const authProductSale = async (req, res, next) => {
   const { body } = req;
   const thisBu = [];
-  body.forEach(async (p) => {
-    // const productIdEx = await storeServices.getProductId(p.product_id);
-    // console.log(await productIdEx);
-    if (p.product_id === undefined) {
+  const products = await storeServices.getAllProducts();
+  body.forEach((p) => {
+    const findProduct = products.find((product) => product.id === p.product_id);
+
+    if (!p || p.product_id === undefined || !findProduct) {
       thisBu.push(false);
     }
   });

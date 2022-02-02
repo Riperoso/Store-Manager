@@ -8,10 +8,11 @@ const createSale = async () => {
 };
 
 const createSalesProduct = async ({ productId, quantity, id }) => {
-  const [sale] = await connection
+  await connection
     .query('INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?,?,?)',
       [id, productId, quantity]);
-  return sale;
+
+  return { message: 'Objeto criado' };
 };
 
 module.exports = {

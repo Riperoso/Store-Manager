@@ -13,6 +13,7 @@ const getProductId = async (id) => {
     [id],
   );
   if (productId.length === 0) return null;
+  console.log('model', productId);
   return productId[0];
 };
 
