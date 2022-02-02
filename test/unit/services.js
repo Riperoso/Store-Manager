@@ -244,34 +244,30 @@ describe('Testes de product', () => {
 describe('Testes de sale', () => {
   describe('Insere uma nova sale no banco de dados', () => {
 
-    // describe('quando é inserido com sucesso', () => {
-    //   const payloadSale = {
-    //     productId: 1,
-    //     quantity: 5,
-    //     id: 1,
-    //   };
+    describe('quando é inserido com sucesso', () => {
+      const payloadSale = {
+        productId: 1,
+        quantity: 5,
+      };
 
-    //   before(() => {
-    //     sinon.stub(saleModel, 'createSalesProduct')
-    //       .resolves([payloadSale]);
-    //   });
+      before(() => {
+        sinon.stub(saleModel, 'createSalesProduct')
+          .returns([{}]);
+          sinon.stub(saleModel, 'createSale')
+          .returns({id: 1})
+      });
 
-    //   after(() => {
-    //     saleModel.createSalesProduct.restore();
-    //   });
+      after(() => {
+        saleModel.createSalesProduct.restore();
+        saleModel.createSale.restore();
+      });
 
-    //   it('retorna um objeto', async () => {
-    //     const response = await saleServices.createSalesProduct(payloadSale);
+      it('retorna um objeto', async () => {
+        const response = await saleServices.createSalesProduct([payloadSale]);
 
-    //     expect(response).to.be.a('object');
-    //   });
+        expect(response).to.be.a('number');
+      });
 
-    //   it('tal objeto possui "id" do novo produto inserido', async () => {
-    //     const response = await saleServices.createSalesProduct(payloadSale);
-
-    //     expect(response).to.have.a.property('id');
-    //   });
-
-    // });
+    });
   })
 })

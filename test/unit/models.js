@@ -310,20 +310,42 @@ describe('Testes de products', () => {
 
 describe('Testes de sales', () => {
 
-  describe('Cadastra uma nova sale no banco de dados', () => {
-    const payloadStore = [{
-      productId: 1,
-      quantity: 5,
-      id: 5
-    }]
+  describe('Cadastra uma nova sales no banco de dados', () => {
 
     before(async () => {
-      const execute = {message: 'Objeto criado'}
-      sinon.stub(connection, 'execute').resolves(execute);
+      const execute = [{ inserId: 1}];
+
+      sinon.stub(connection, 'execute').returns(execute);
     });
 
     after(async () => {
       connection.execute.restore();
+    });
+
+    describe('quando é inserido com sucesso', () => {
+
+      it('retorna um objeto', async () => {
+        const response = await saleModel.createSale();
+        console.log(response)
+
+        expect(response).to.be.a('object');
+      });
+    });
+  });
+
+  describe('Cadastra uma nova sales_product no banco de dados', () => {
+    const payloadStore = {
+      productId: 1,
+      quantity: 5,
+      id: 5
+    }
+
+    before(async () => {
+      sinon.stub(connection, 'query').returns(payloadStore);
+    });
+
+    after(async () => {
+      connection.query.restore();
     });
 
     describe('quando é inserido com sucesso', () => {
