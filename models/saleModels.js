@@ -12,7 +12,7 @@ const createSalesProduct = async ({ productId, quantity, id }) => {
     .query('INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?,?,?)',
       [id, productId, quantity]);
 
-  return { message: 'Objeto criado' };
+  console.log('Objeto criado');
 };
 
 module.exports = {
